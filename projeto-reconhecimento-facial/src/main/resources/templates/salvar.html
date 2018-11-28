@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width" />
+	<title>Cadastro de Pessoa</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"></link>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<strong>Cadastro de Pessoa</strong>
+		</div>
+		<div class="panel-body">
+			<form class="form-horizontal" th:object="${pessoa}" enctype="multipart/form-data" th:action="@{/save}" method="POST" style="margin: 10px">
+				<div class="form-group">
+ 					<fieldset>
+						<div class="form-group row">
+							<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+								<div th:each="detailedError : ${#fields.detailedErrors()}">
+									<span th:text="${detailedError.message}"></span>
+								</div>
+							</div>
+						</div> 					
+						<div class="form-group row">
+						    <div class="col-md-1">
+						        <input type="text" class="form-control input-sm" id="id" th:field="*{id}" readOnly="readonly"/>
+						    </div>
+						 </div>
+						<div class="form-group row">                                                          
+							<div class="col-md-2" th:classappend="${#fields.hasErrors('nome')}? 'has-error'">
+							    <label>Nome</label>
+							    <input type="text" class="form-control input-sm" th:field="*{nome}" autofocus="autofocus" placeholder="Informe o nome" maxlength="400"/>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-md-2" th:classappend="${#fields.hasErrors('cpf')}? 'has-error'">
+								<label>cpf</label> 
+								<input type="text" class="form-control input-sm" th:field="*{cpf}" maxlength="20" placeholder="Informe o cpf"/>
+							</div>
+						</div>	
+						<div class="form-group row">
+							<div class="col-md-2" th:classappend="${#fields.hasErrors('rg')}? 'has-error'">
+								<label>Rg</label> 
+								<input type="text" class="form-control input-sm" th:field="*{rg}" maxlength="20" placeholder="Informe o Rg"/>
+							</div>
+						</div>						
+						<div class="form-group row">
+							<div class="col-md-2" th:classappend="${#fields.hasErrors('telefoneresidencial')}? 'has-error'">
+								<label>Telefone</label>
+								<input type="text" class="form-control input-sm"  th:field="*{telefoneresidencial}" maxlength="10" placeholder="Informe o telefone"/>
+							</div>
+						</div>	
+						<div class="form-group row">
+							<div class="col-md-2" th:classappend="${#fields.hasErrors('email')}? 'has-error'">
+								<label>E-mail</label>
+								<input type="text" class="form-control input-sm"  th:field="*{email}" maxlength="50" placeholder="Informe o email"/>
+							</div>
+						</div>	
+						<div class="form-group row">
+							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.endereco')}? 'has-error'">
+								<label>Endereço</label>
+								<input type="text" class="form-control input-sm"  th:field="*{endereco.endereco}" maxlength="100" placeholder="Informe o endereço"/>
+							</div>
+						</div>	
+						<div class="form-group row">
+							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.numero')}? 'has-error'">
+								<label>Número</label>
+								<input type="text" class="form-control input-sm" th:field="*{endereco.numero}" maxlength="100" placeholder="Informe o numero"/>
+							</div>
+						</div>	
+						
+						<div class="form-group row">
+							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.cep')}? 'has-error'">
+								<label>Cep</label>
+								<input type="text" class="form-control input-sm" th:field="*{endereco.cep}" maxlength="12" placeholder="Informe o cep"/>
+							</div>
+						</div>	
+						<div class="form-group row">
+							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.logradouro')}? 'has-error'">
+								<label>Logradouro</label>
+								<input type="text" class="form-control input-sm" th:field="*{endereco.logradouro}" maxlength="100" placeholder="Informe o logradouro"/>
+							</div>
+						</div>	
+						<div class="form-group row">
+							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.bairro')}? 'has-error'">
+								<label>Bairro</label>
+								<input type="text" class="form-control input-sm"  th:field="*{endereco.bairro}" maxlength="100" placeholder="Informe o bairro"/>
+							</div>
+						</div>	
+						<div class="form-group row">
+							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.cidade')}? 'has-error'">
+								<label>Cidade</label>
+								<input type="text" class="form-control input-sm" th:field="*{endereco.cidade}" maxlength="100" placeholder="Informe a cidade"/>
+							</div>
+						</div>	
+						<div class="form-group row">
+							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.estado')}? 'has-error'">
+								<label>Estado</label>
+								<input type="text" class="form-control input-sm"  th:field="*{endereco.estado}" maxlength="100" placeholder="Informe o estado"/>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.pais')}? 'has-error'">
+								<label>Pais</label>
+								<input type="text" class="form-control input-sm"  th:field="*{endereco.pais}" maxlength="100" placeholder="Informe o pais"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<input type="file" name="fileUpload"/><br/><br/>
+						</div>							
+					</fieldset>
+				</div>
+				<div class="form-group row">
+					<button type="submit" class="btn btn-sm btn-primary">Salvar</button>
+					<a th:href="@{/}" class="btn btn-sm btn-default">Cancelar</a>
+				</div>
+			</form>
+			
+		</div>
+	</div>
+</body>
+</html>
