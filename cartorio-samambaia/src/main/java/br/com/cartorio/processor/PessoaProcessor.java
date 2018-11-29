@@ -10,10 +10,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import br.com.cartorio.entity.Pessoa;
 import br.com.cartorio.entity.RetornoIdentificarPessoa;
 import br.com.cartorio.http.request.HttpRequestApi;
+import br.com.cartorio.util.GsonHelper;
 
 /**
  * @author vitor
@@ -35,13 +37,16 @@ public class PessoaProcessor {
 			
 			if (entity != null) {
 				
-				Gson gson = new Gson();
 				String jsonString = EntityUtils.toString(entity).trim();
-				retornoApi = gson.fromJson(jsonString, RetornoIdentificarPessoa.class);
+				retornoApi = GsonHelper.customGson.fromJson(jsonString, RetornoIdentificarPessoa.class);
 
 			}
-		} catch (Exception e) {
+		}catch(JsonSyntaxException e) {
+			e.printStackTrace();
+		}
+		catch (Exception e) {
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		return retornoApi;
 	}

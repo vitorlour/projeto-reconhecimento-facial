@@ -57,9 +57,6 @@ public class Pessoa {
 	private String personGroupId;
 
 	@Expose
-	private String imagemPath;
-
-	@Expose
 	private byte[] imagem;
 
 	@Expose

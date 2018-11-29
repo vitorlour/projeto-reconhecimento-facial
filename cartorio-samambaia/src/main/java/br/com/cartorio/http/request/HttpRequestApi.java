@@ -7,7 +7,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -82,12 +81,6 @@ public class HttpRequestApi {
 			String jsonString = EntityUtils.toString(response.getEntity()).trim();
 
 			pessoa = GsonHelper.customGson.fromJson(jsonString, Pessoa[].class);
-
-			for (Pessoa pessoa2 : pessoa) {
-				byte[] encodeBase64 = Base64.encodeBase64(pessoa2.getImagem());
-				String base64Encoded = new String(encodeBase64, "UTF-8");
-				pessoa2.setImagemPath(base64Encoded);
-			}
 
 		} catch (JsonSyntaxException j) {
 			j.printStackTrace();
@@ -176,7 +169,7 @@ public class HttpRequestApi {
 					identificadas.add(pessoasIdentificadas);
 				}
 			}
-
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

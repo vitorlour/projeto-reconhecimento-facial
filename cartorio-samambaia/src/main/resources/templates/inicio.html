@@ -54,8 +54,7 @@
 							<td th:text="${pessoa.endereco.estado}"></td>
 							<td th:text="${pessoa.endereco.pais}"></td>	
 							<td th:text="${pessoa.personId}"></td>
-							<td><img alt="img" src="data:image/jpg;base64,${pessoa.imagemPath}"/></td>
-						
+							<td><img alt="imagem" th:src="@{/image/{imagem_id}(imagem_id=${pessoa.id})}" height="100" width="100" /></td>
 							<td>
 								<div class="btn-group pull-right">
 							   		<a class="btn btn-sm btn-primary" th:href="@{/edit/{id}(id=${pessoa.id})}" >Editar</a>
