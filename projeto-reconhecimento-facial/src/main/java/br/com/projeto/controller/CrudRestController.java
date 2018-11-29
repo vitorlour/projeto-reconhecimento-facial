@@ -54,7 +54,7 @@ public class CrudRestController {
 	@RequestMapping(value = "salvar", method = RequestMethod.POST, consumes="application/json")
 	@ResponseStatus(HttpStatus.OK)
 	public RetornoIdentificarPessoa save(@RequestBody Pessoa pessoa, BindingResult result)  {
-			return pessoaProcessor.salvarPessoaSemTrava(pessoa);
+			return pessoaProcessor.salvarPessoa(pessoa);
 	}
 
 }

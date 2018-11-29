@@ -17,7 +17,6 @@ import br.com.projeto.azure.conexao.ConexaoAzure;
 import br.com.projeto.azure.service.FaceService;
 import br.com.projeto.constants.Constantes;
 import br.com.projeto.entity.PessoasIdentificadas;
-import br.com.projeto.entity.Pessoa;
 import br.com.projeto.entity.RetornoIdentificarPessoa;
 import br.com.projeto.service.PessoaService;
 
@@ -37,7 +36,7 @@ public class FaceServiceImpl implements FaceService {
 	}
 
 	public List<DetectedFace> detectarRosto(byte[] imagem) {
-		
+
 		List<DetectedFace> listaRostosDetectados = ConexaoAzure.ConectaAzureBrasil().faces().detectWithStream(imagem,
 				streamParameter.withReturnFaceId(true));
 
@@ -83,28 +82,24 @@ public class FaceServiceImpl implements FaceService {
 
 		List<IdentifyCandidate> listaRostosIdentificados = identificarRosto(imagem);
 
-		List<Pessoa> listaPessoasIdentificadas = new ArrayList<Pessoa>();
+		List<PessoasIdentificadas> listaPessoasIdentificadas = new ArrayList<PessoasIdentificadas>();
 
 		RetornoIdentificarPessoa retornoPessoa = new RetornoIdentificarPessoa();
 
-		List<PessoasIdentificadas> listaIdentificarPessoa = new ArrayList<PessoasIdentificadas>();
 		try {
 			if (listaRostosIdentificados != null) {
 
 				for (IdentifyCandidate listaRostos : listaRostosIdentificados) {
-					listaPessoasIdentificadas
-							.add(pessoaService.encontrarPorPersonID(listaRostos.personId().toString()));
+					if (pessoaService.existePersonId(listaRostos.personId().toString())) {
+						PessoasIdentificadas pessoaIdentificada = pessoaService
+								.encontrarPessoasIdentificadasPorPersonID(listaRostos.personId().toString());
+						listaPessoasIdentificadas.add(new PessoasIdentificadas(pessoaIdentificada.getId(),
+								pessoaIdentificada.getNome(), pessoaIdentificada.getCpf(), 
+								pessoaIdentificada.getImagem(), listaRostos.confidence()*100));
+					}
 				}
 				if (listaPessoasIdentificadas != null) {
-					for (Pessoa pessoa : listaPessoasIdentificadas) {
-						if (pessoa != null) {
-							listaIdentificarPessoa
-									.add((new PessoasIdentificadas(pessoa.getId(), pessoa.getNome(), pessoa.getCpf())));
-						}
-						if (listaIdentificarPessoa != null) {
-							retornoPessoa.setIdentificarPessoa(listaIdentificarPessoa);
-						}
-					}
+					retornoPessoa.setIdentificarPessoa(listaPessoasIdentificadas);
 				}
 			}
 		} catch (APIErrorException e) {

@@ -6,6 +6,7 @@ package br.com.projeto.service;
 import java.util.List;
 
 import br.com.projeto.entity.Pessoa;
+import br.com.projeto.entity.PessoasIdentificadas;
 
 /**
  * @author vitor
@@ -21,6 +22,8 @@ public interface PessoaService {
 	
 	void excluir(Pessoa pessoa);
 	
-	Pessoa encontrarPorPersonID(String personId);
+	PessoasIdentificadas encontrarPessoasIdentificadasPorPersonID(String personId);
+	
+	boolean existePersonId(String personId);
 
 }

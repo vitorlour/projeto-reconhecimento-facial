@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.projeto.entity.Pessoa;
+import br.com.projeto.entity.PessoasIdentificadas;
 import br.com.projeto.repository.PessoaRepository;
 import br.com.projeto.service.PessoaService;
 
@@ -60,8 +61,20 @@ public class PessoaServiceImpl implements PessoaService {
 
 	@Override
 	@Transactional
-	public Pessoa encontrarPorPersonID(String personId) {
-		return repository.findByPersonId(personId);
+	public PessoasIdentificadas encontrarPessoasIdentificadasPorPersonID(String personId) {
+		Pessoa pessoa = repository.findByPersonId(personId);
+		PessoasIdentificadas pessoasIdentificadas = null;
+		if (pessoa != null) {
+			pessoasIdentificadas = new PessoasIdentificadas(pessoa.getId(), pessoa.getNome(), pessoa.getCpf(), pessoa.getImagem(), 0.0);
+		}
+		return pessoasIdentificadas;
 	}
+	
+	@Override
+	@Transactional
+	public boolean existePersonId(String personId) {
+		return repository.findByPersonId(personId) !=null;
+	}
+
 
 }

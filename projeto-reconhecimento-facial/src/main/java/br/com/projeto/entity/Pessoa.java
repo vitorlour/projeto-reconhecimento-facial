@@ -38,6 +38,7 @@ import lombok.Setter;
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 public class Pessoa {
 	
+		
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -74,9 +75,6 @@ public class Pessoa {
 	@Column(name="persongroupid", nullable=true)
 	private String personGroupId;
 	
-	@Column(name="imagempath", nullable=true)
-	private String imagemPath;
-	
 	@Lob
 	@Column(name="imagem", nullable=false, columnDefinition="mediumblob")
 	private byte[] imagem;
@@ -86,7 +84,7 @@ public class Pessoa {
 	@JoinColumn(name="endereco_id")
 	@Valid
 	private Endereco endereco;
-
+	
 	@Override
 	public String toString() {
 		return "Pessoa [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", rg=" + rg + ", telefoneresidencial="

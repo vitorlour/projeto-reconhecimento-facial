@@ -34,7 +34,7 @@ public class PessoaProcessor {
 	@Autowired
 	private PersonGroupService personGroupService;
 
-	public RetornoIdentificarPessoa salvarPessoaSemTrava(Pessoa pessoa) {
+	public RetornoIdentificarPessoa salvarPessoa(Pessoa pessoa) {
 		
 		RetornoIdentificarPessoa retornoIdentificarPessoa = new RetornoIdentificarPessoa();
 		
@@ -54,6 +54,7 @@ public class PessoaProcessor {
 			retornoIdentificarPessoa.setMensagem(e.getMessage());
 		}catch (Exception e) {
 			retornoIdentificarPessoa.setMensagem(e.getMessage());
+			e.printStackTrace();
 		}
 		return retornoIdentificarPessoa;
 	}

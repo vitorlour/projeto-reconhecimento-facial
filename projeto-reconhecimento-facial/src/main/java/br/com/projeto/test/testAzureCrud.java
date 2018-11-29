@@ -5,7 +5,6 @@ package br.com.projeto.test;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
@@ -18,16 +17,11 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import br.com.microsoft.azure.cognitiveservices.vision.faceapi.models.DetectedFace;
-import br.com.microsoft.azure.cognitiveservices.vision.faceapi.models.IdentifyCandidate;
 import br.com.projeto.azure.PessoaProcessor;
 import br.com.projeto.azure.service.impl.FaceServiceImpl;
 import br.com.projeto.entity.Endereco;
-import br.com.projeto.entity.PessoasIdentificadas;
 import br.com.projeto.entity.Pessoa;
-import br.com.projeto.entity.RetornoIdentificarPessoa;
 import br.com.projeto.service.PessoaService;
-import br.com.projeto.util.imagemUtil;
 
 /**
  * @author vitor
