@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import br.com.cartorio.entity.Pessoa;
@@ -36,17 +35,14 @@ public class PessoaProcessor {
 			HttpEntity entity = httpRequestApi.salvarPessoaRequest(pessoa);
 			
 			if (entity != null) {
-				
 				String jsonString = EntityUtils.toString(entity).trim();
 				retornoApi = GsonHelper.customGson.fromJson(jsonString, RetornoIdentificarPessoa.class);
-
 			}
 		}catch(JsonSyntaxException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
-			e.printStackTrace();
 		}
 		return retornoApi;
 	}

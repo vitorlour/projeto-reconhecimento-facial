@@ -3,7 +3,7 @@
  */
 package br.com.cartorio.entity;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 
 import com.google.gson.annotations.Expose;
 
@@ -20,35 +20,35 @@ public class Endereco {
 	private long id;
 	
 	@Expose
-	@NotNull (message = "Preencha o endereço")
+	@NotEmpty (message = "Preencha o endereço")
 	private String endereco;
 	
 	@Expose
-	@NotNull (message = "Preencha o número")
+	@NotEmpty (message = "Preencha o número")
 	private String numero;
 	
 	@Expose
-	@NotNull (message = "Preencha o cep")
+	@NotEmpty (message = "Preencha o cep")
 	private String cep;
 	
 	@Expose
-	@NotNull(message = "Preencha o bairro")
+	@NotEmpty(message = "Preencha o bairro")
 	private String logradouro;
 	
 	@Expose
-	@NotNull (message = "Preencha o bairro")
+	@NotEmpty(message = "Preencha o bairro")
 	private String bairro;
 	
 	@Expose
-	@NotNull (message = "Preencha a cidade")
+	@NotEmpty(message = "Preencha a cidade")
 	private String cidade;
 	
 	@Expose
-	@NotNull (message = "Preencha o estado")
+	@NotEmpty(message = "Preencha o estado")
 	private String estado;
 	
 	@Expose
-	@NotNull (message = "Preencha o pais")
+	@NotEmpty(message = "Preencha o pais")
 	private String pais;
 	
 	@Expose
