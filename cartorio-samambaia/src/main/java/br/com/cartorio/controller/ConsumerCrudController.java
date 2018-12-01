@@ -52,10 +52,8 @@ public class ConsumerCrudController {
 			mv = new ModelAndView("/editar");
 		} else {
 			mv = new ModelAndView("/salvar");
-
 		}
 		mv.addObject("pessoa", pessoa);
-
 		return mv;
 	}
 
