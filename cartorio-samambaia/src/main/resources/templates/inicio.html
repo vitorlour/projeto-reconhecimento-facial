@@ -90,11 +90,11 @@
 	}
 	
 	table.table tr th:first-child {
-		width: 60px;
+		width: 30px;
 	}
 	
 	table.table tr th:last-child {
-		width: 100px;
+		width: 80px;
 	}
 	
 	table.table-striped tbody tr:nth-of-type(odd) {
@@ -333,9 +333,7 @@
 					<tr th:each="pessoa : ${pessoa}">
 						<td th:text="${pessoa.id}"></td>
 						<td>
-							<div class="col col-md-2 image-col">
-								<img class="img-circle" th:src="@{/image/{imagem_id}(imagem_id=${pessoa.id})}" height="100" width="100" />
-							</div>
+							<img class="img-circle" th:src="@{/image/{imagem_id}(imagem_id=${pessoa.id})}" height="100" width="100" />
 						</td>	
 						<td th:text="${pessoa.nome}"></td>
 						<td th:text="${pessoa.cpf}"></td>
@@ -351,9 +349,9 @@
 						<td th:text="${pessoa.endereco.estado}"></td>
 						<td th:text="${pessoa.endereco.pais}"></td>
 						<td th:text="${pessoa.personId}"></td>
-							<td><a th:href="@{/edit/{id}(id=${pessoa.id})}" class="edit" data-toggle="modal"><i class="material-icons"	data-toggle="tooltip" title="Editar">&#xE254;</i></a> 
-								<a th:href="@{/delete/{id}(id=${pessoa.id})}" class="delete" data-toggle="modal"><i class="material-icons"	data-toggle="tooltip" title="Excluir">&#xE872;</i></a>
-							</td>
+						<td><a th:href="@{/edit/{id}(id=${pessoa.id})}" class="edit" data-toggle="modal"><i class="material-icons"	data-toggle="tooltip" title="Editar">&#xE254;</i></a> 
+							<a th:href="@{/delete/{id}(id=${pessoa.id})}" class="delete" data-toggle="modal"><i class="material-icons"	data-toggle="tooltip" title="Excluir">&#xE872;</i></a>
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -365,7 +363,7 @@
 				<form>
 					<div class="modal-header">
 						<h4 class="modal-title">Deletar Pessoa</h4>
-						<button type="button" class="close" data-dismiss="modal" th:href="@{/delete/{id}(id=${pessoa.id})}"
+						<button type="button" class="close" data-dismiss="modal" 
 							aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
