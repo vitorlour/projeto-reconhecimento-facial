@@ -28,7 +28,7 @@ public class ConsumerAzureController {
 
 	@GetMapping("/reconhecimento/")
 	public ModelAndView add(MultipartFile fileUpload) {
-		ModelAndView mv = new ModelAndView("/reconhecimentofacial");
+		ModelAndView mv = new ModelAndView("/reconhecimentotest");
 
 		mv.addObject("fileUpload", fileUpload);
 
