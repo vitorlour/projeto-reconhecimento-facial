@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import br.com.microsoft.azure.cognitiveservices.vision.faceapi.models.APIErrorException;
 import br.com.microsoft.azure.cognitiveservices.vision.faceapi.models.AddPersonFaceFromStreamOptionalParameter;
 import br.com.microsoft.azure.cognitiveservices.vision.faceapi.models.CreatePersonGroupPersonsOptionalParameter;
 import br.com.microsoft.azure.cognitiveservices.vision.faceapi.models.PersistedFace;
@@ -31,11 +32,11 @@ public class PersonGroupPersonServiceImpl implements PersonGroupPersonService {
 		faceStreamParameter = new AddPersonFaceFromStreamOptionalParameter();
 	}
 
-	public Person criarPessoaGrupo(String personGroupId, String nome) {
+	public Person criarPessoaGrupo(String personGroupId, String nome) throws APIErrorException {
 		return ConexaoAzure.ConectaAzureBrasil().personGroupPersons().create(personGroupId, groupPerson.withName(nome));
 	}
 
-	public PersistedFace adicionarRostoPessoaGrupo(String personGroupId, String personId, byte[] imagem) {
+	public PersistedFace adicionarRostoPessoaGrupo(String personGroupId, String personId, byte[] imagem)  throws APIErrorException{
 		ZonedDateTime now = ZonedDateTime.now();
 		UUID personIdUUID = UUID.fromString(personId);
 		return ConexaoAzure.ConectaAzureBrasil().personGroupPersons().addPersonFaceFromStream(personGroupId, personIdUUID,

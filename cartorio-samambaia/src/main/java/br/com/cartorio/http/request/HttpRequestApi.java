@@ -24,6 +24,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import br.com.cartorio.constants.Constantes;
+import br.com.cartorio.entity.Imagem;
 import br.com.cartorio.entity.Pessoa;
 import br.com.cartorio.entity.PessoasIdentificadas;
 import br.com.cartorio.entity.RetornoIdentificarPessoa;
@@ -48,7 +49,13 @@ public class HttpRequestApi {
 			HttpPost request = new HttpPost(uri);
 
 			request.setHeader("Content-Type", "application/json;charset=UTF-8");
-			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			
+			Gson gson = null;
+			if(pessoa.getId() > 0) {
+				gson = new Gson();
+			}else {
+				gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			}
 
 			String jsonInString = gson.toJson(pessoa);
 
@@ -130,13 +137,13 @@ public class HttpRequestApi {
 			httpclient.execute(request);
 
 		} catch (JsonSyntaxException j) {
-			j.printStackTrace();
+			System.out.println(j.getMessage());
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
-	public List<PessoasIdentificadas> reconhecimentoFacial(Pessoa pessoa) {
+	public List<PessoasIdentificadas> reconhecimentoFacial(Imagem imagem) {
 
 		List<PessoasIdentificadas> identificadas = new ArrayList<PessoasIdentificadas>();
 
@@ -151,9 +158,9 @@ public class HttpRequestApi {
 
 			request.setHeader("Content-Type", "application/json");
 
-			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			Gson gson = new Gson();
 
-			String jsonInString = gson.toJson(pessoa);
+			String jsonInString = gson.toJson(imagem);
 
 			StringEntity reqEntity = new StringEntity(jsonInString);
 

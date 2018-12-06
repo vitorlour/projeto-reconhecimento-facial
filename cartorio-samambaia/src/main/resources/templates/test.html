@@ -10,7 +10,6 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/749AD362-7192-BF4C-BD63-784CD1E2BE59/main.js" charset="UTF-8"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style type="text/css">
@@ -238,28 +237,8 @@
 	}	
 </style>
 <script type="text/javascript">
-$(document).ready(function(){
-	// Activate tooltip
-	$('[data-toggle="tooltip"]').tooltip();
-	
-	// Select/Deselect checkboxes
-	var checkbox = $('table tbody input[type="checkbox"]');
-	$("#selectAll").click(function(){
-		if(this.checked){
-			checkbox.each(function(){
-				this.checked = true;                        
-			});
-		} else{
-			checkbox.each(function(){
-				this.checked = false;                        
-			});
-		} 
-	});
-	checkbox.click(function(){
-		if(!this.checked){
-			$("#selectAll").prop("checked", false);
-		}
-	});
+$("#btn-mensagem").click(function(){
+    $("#modal-mensagem").modal();
 });
 </script>
 </head>
@@ -276,6 +255,8 @@ $(document).ready(function(){
 					<div class="col-sm-6">
 						<a th:href="@{/save/}" class="btn btn-success" data-target="addNovaPessoaModal"><i class="material-icons">&#xE147;</i> <span>Adicionar</span></a>
 						<a class="btn pull-right btn-sm btn-success" th:href="@{/reconhecimento/}"><i class="material-icons">face</i> <span>Reconhecimento Facial</span></a>
+						<button class="btn btn-primary" id="btn-mensagem">Exibir modal via JavaScript</button>
+						
 					</div>
 				</div>
 			</div>
@@ -425,5 +406,22 @@ $(document).ready(function(){
 			</div>
 		</div>
 	</div>
+	
+	<div class="modal fade" id="modal-mensagem">
+    <div class="modal-dialog">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
+                 <h4 class="modal-title">Título da mensagem</h4>
+             </div>
+             <div class="modal-body">
+                 <p>Conteúdo da mensagem</p>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+             </div>
+         </div>
+     </div>
+ </div>
 </body>
 </html>                                		                            

@@ -1,121 +1,422 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 <head>
+	
 	<meta charset="UTF-8" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width" />
-	<title>Editar Pessoa</title>
-	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"></link>
+	<title>Pessoas</title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/749AD362-7192-BF4C-BD63-784CD1E2BE59/main.js" charset="UTF-8"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<style type="text/css">
+	body {
+		color: #566787;
+		background: #f5f5f5;
+		font-family: 'Varela Round', sans-serif;
+		font-size: 13px;
+	}
+	
+	.container {
+		width: 1880px;
+	}
+	
+	.table-wrapper {
+		background: #fff;
+		padding: 20px 25px;
+		margin: 30px 0;
+		border-radius: 3px;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+	}
+	
+	.table-title {
+		padding-bottom: 15px;
+		background: #435d7d;
+		color: #fff;
+		padding: 16px 30px;
+		margin: -20px -25px 10px;
+		border-radius: 3px 3px 0 0;
+	}
+	
+	.table-title h2 {
+		margin: 5px 0 0;
+		font-size: 24px;
+	}
+	
+	.table-title .btn-group {
+		float: right;
+	}
+	
+	.table-title .btn {
+		color: #fff;
+		float: right;
+		font-size: 13px;
+		border: none;
+		min-width: 50px;
+		border-radius: 2px;
+		border: none;
+		outline: none !important;
+		margin-left: 10px;
+	}
+	
+	.table-title .btn i {
+		float: left;
+		font-size: 21px;
+		margin-right: 5px;
+	}
+	
+	.table-title .btn span {
+		float: left;
+		margin-top: 2px;
+	}
+	
+	table.table tr th, table.table tr td {
+		border-color: #e9e9e9;
+		padding: 12px 15px;
+		vertical-align: middle;
+	}
+	
+	table.table tr th:first-child {
+		width: 30px;
+	}
+	
+	table.table tr th:last-child {
+		width: 80px;
+	}
+	
+	table.table-striped tbody tr:nth-of-type(odd) {
+		background-color: #fcfcfc;
+	}
+	
+	table.table-striped.table-hover tbody tr:hover {
+		background: #f5f5f5;
+	}
+	
+	table.table th i {
+		font-size: 13px;
+		margin: 0 5px;
+		cursor: pointer;
+	}
+	
+	table.table td:last-child i {
+		opacity: 0.9;
+		font-size: 22px;
+		margin: 0 5px;
+	}
+	
+	table.table td a {
+		font-weight: bold;
+		color: #566787;
+		display: inline-block;
+		text-decoration: none;
+		outline: none !important;
+	}
+	
+	table.table td a:hover {
+		color: #2196F3;
+	}
+	
+	table.table td a.edit {
+		color: #FFC107;
+	}
+	
+	table.table td a.delete {
+		color: #F44336;
+	}
+	
+	table.table td i {
+		font-size: 19px;
+	}
+	
+	table.table .avatar {
+		border-radius: 50%;
+		vertical-align: middle;
+		margin-right: 10px;
+	}
+	
+	.pagination {
+		float: right;
+		margin: 0 0 5px;
+	}
+	
+	.pagination li a {
+		border: none;
+		font-size: 13px;
+		min-width: 30px;
+		min-height: 30px;
+		color: #999;
+		margin: 0 2px;
+		line-height: 30px;
+		border-radius: 2px !important;
+		text-align: center;
+		padding: 0 6px;
+	}
+	
+	.pagination li a:hover {
+		color: #666;
+	}
+	
+	.pagination li.active a, .pagination li.active a.page-link {
+		background: #03A9F4;
+	}
+	
+	.pagination li.active a:hover {
+		background: #0397d6;
+	}
+	
+	.pagination li.disabled i {
+		color: #ccc;
+	}
+	
+	.pagination li i {
+		font-size: 16px;
+		padding-top: 6px
+	}
+	
+	.hint-text {
+		float: left;
+		margin-top: 10px;
+		font-size: 13px;
+	}
+	/* Custom checkbox */
+	.custom-checkbox {
+		position: relative;
+	}
+	
+	.custom-checkbox input[type="checkbox"] {
+		opacity: 0;
+		position: absolute;
+		margin: 5px 0 0 3px;
+		z-index: 9;
+	}
+	
+	.custom-checkbox label:before {
+		width: 18px;
+		height: 18px;
+	}
+	
+	.custom-checkbox label:before {
+		content: '';
+		margin-right: 10px;
+		display: inline-block;
+		vertical-align: text-top;
+		background: white;
+		border: 1px solid #bbb;
+		border-radius: 2px;
+		box-sizing: border-box;
+		z-index: 2;
+	}
+	
+	.custom-checkbox input[type="checkbox"]:checked+label:after {
+		content: '';
+		position: absolute;
+		left: 6px;
+		top: 3px;
+		width: 6px;
+		height: 11px;
+		border: solid #000;
+		border-width: 0 3px 3px 0;
+		transform: inherit;
+		z-index: 3;
+		transform: rotateZ(45deg);
+	}
+	
+	.custom-checkbox input[type="checkbox"]:checked+label:before {
+		border-color: #03A9F4;
+		background: #03A9F4;
+	}
+	
+	.custom-checkbox input[type="checkbox"]:checked+label:after {
+		border-color: #fff;
+	}
+	
+	.custom-checkbox input[type="checkbox"]:disabled+label:before {
+		color: #b8b8b8;
+		cursor: auto;
+		box-shadow: none;
+		background: #ddd;
+	}
+	/* Modal styles */
+	.modal .modal-dialog {
+		max-width: 400px;
+	}
+	
+	.modal .modal-header, .modal .modal-body, .modal .modal-footer {
+		padding: 20px 30px;
+	}
+	
+	.modal .modal-content {
+		border-radius: 3px;
+	}
+	
+	.modal .modal-footer {
+		background: #ecf0f1;
+		border-radius: 0 0 3px 3px;
+	}
+	
+	.modal .modal-title {
+		display: inline-block;
+	}
+	
+	.modal .form-control {
+		border-radius: 2px;
+		box-shadow: none;
+		border-color: #dddddd;
+	}
+	
+	.modal textarea.form-control {
+		resize: vertical;
+	}
+	
+	.modal .btn {
+		border-radius: 2px;
+		min-width: 100px;
+	}
+	
+	.modal form label {
+		font-weight: normal;
+	}
+	
+	.wrapper {
+   	 text-align: right;
+	}
+	
+	</style>
+	<script type="text/javascript">
+	
+	
+	</script>
 </head>
 <body>
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<strong>Editar Pessoa</strong>
-		</div>
-		<div class="panel-body">
-			<form class="form-horizontal" th:object="${pessoa}" enctype="multipart/form-data" th:action="@{/save}" method="POST" style="margin: 10px">
-				<div class="form-group">
- 					<fieldset>
-						<div class="form-group row">
-							<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
-								<div th:each="detailedError : ${#fields.detailedErrors()}">
-									<span th:text="${detailedError.message}"></span>
-								</div>
+	<div class="container">
+		<div class="table-wrapper">
+			<div class="table-title">
+				<div class="row">
+					<div class="col-sm-6">
+						<h2>
+							Cognitive <b>Services</b>
+						</h2>
+					</div>
+				</div>
+			</div>
+				<form th:object="${pessoa}"
+					enctype="multipart/form-data" th:action="@{/save}" method="POST"
+					style="margin: 10px">
+					<div class="row" align="middle">
+						<h4>
+						Editar <b>Pessoa</b> 
+						</h4>
+					</div>
+					<div class="form-group">
+						<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+							<div th:each="detailedError : ${#fields.detailedErrors()}">
+								<span th:text="${detailedError.message}"></span>
 							</div>
-						</div> 					
-						<div class="form-group row">
-						    <div class="col-md-1">
+						</div>
+					</div>
+					
+						 <div class="form-group">
+						 		<label>ID</label>
 						        <input type="text" class="form-control input-sm" id="id" th:field="*{id}" readOnly="readonly"/>
-						    </div>
 						 </div>
-						<div class="form-group row">                                                          
-							<div class="col-md-2" th:classappend="${#fields.hasErrors('nome')}? 'has-error'">
-							    <label>Nome</label>
-							    <input type="text" class="form-control input-sm" th:field="*{nome}" autofocus="autofocus" placeholder="Informe o nome" maxlength="400"/>
-							</div>
+					
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('nome')}? 'has-error'">
+							<label>Name</label> <input type="text"
+								class="form-control input-sm" th:field="*{nome}"
+								autofocus="autofocus" placeholder="Informe o nome"
+								maxlength="400" />
 						</div>
-						<div class="form-group row">
-							<div class="col-md-2" th:classappend="${#fields.hasErrors('cpf')}? 'has-error'">
-								<label>cpf</label> 
-								<input type="text" class="form-control input-sm" th:field="*{cpf}" maxlength="20" placeholder="Informe o cpf"/>
-							</div>
-						</div>	
-						<div class="form-group row">
-							<div class="col-md-2" th:classappend="${#fields.hasErrors('rg')}? 'has-error'">
-								<label>Rg</label> 
-								<input type="text" class="form-control input-sm" th:field="*{rg}" maxlength="20" placeholder="Informe o Rg"/>
-							</div>
-						</div>						
-						<div class="form-group row">
-							<div class="col-md-2" th:classappend="${#fields.hasErrors('telefoneresidencial')}? 'has-error'">
-								<label>Telefone</label>
-								<input type="text" class="form-control input-sm"  th:field="*{telefoneresidencial}" maxlength="10" placeholder="Informe o telefone"/>
-							</div>
-						</div>	
-						<div class="form-group row">
-							<div class="col-md-2" th:classappend="${#fields.hasErrors('email')}? 'has-error'">
-								<label>E-mail</label>
-								<input type="text" class="form-control input-sm"  th:field="*{email}" maxlength="50" placeholder="Informe o email"/>
-							</div>
-						</div>	
-						<div class="form-group row">
-							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.endereco')}? 'has-error'">
-								<label>Endereço</label>
-								<input type="text" class="form-control input-sm"  th:field="*{endereco.endereco}" maxlength="100" placeholder="Informe o endereço"/>
-							</div>
-						</div>	
-						<div class="form-group row">
-							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.numero')}? 'has-error'">
-								<label>Número</label>
-								<input type="text" class="form-control input-sm" th:field="*{endereco.numero}" maxlength="100" placeholder="Informe o numero"/>
-							</div>
-						</div>	
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('cpf')}? 'has-error'">
+							<label>CPF</label> <input type="text"
+								class="form-control input-sm" th:field="*{cpf}" maxlength="20"
+								placeholder="Informe o cpf" />
+						</div>
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('rg')}? 'has-error'">
+							<label>RG</label> <input type="text"
+								class="form-control input-sm" th:field="*{rg}" maxlength="20"
+								placeholder="Informe o Rg" />
+						</div>
 						
-						<div class="form-group row">
-							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.cep')}? 'has-error'">
-								<label>Cep</label>
-								<input type="text" class="form-control input-sm" th:field="*{endereco.cep}" maxlength="12" placeholder="Informe o cep"/>
-							</div>
-						</div>	
-						<div class="form-group row">
-							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.logradouro')}? 'has-error'">
-								<label>Logradouro</label>
-								<input type="text" class="form-control input-sm" th:field="*{endereco.logradouro}" maxlength="100" placeholder="Informe o logradouro"/>
-							</div>
-						</div>	
-						<div class="form-group row">
-							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.bairro')}? 'has-error'">
-								<label>Bairro</label>
-								<input type="text" class="form-control input-sm"  th:field="*{endereco.bairro}" maxlength="100" placeholder="Informe o bairro"/>
-							</div>
-						</div>	
-						<div class="form-group row">
-							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.cidade')}? 'has-error'">
-								<label>Cidade</label>
-								<input type="text" class="form-control input-sm" th:field="*{endereco.cidade}" maxlength="100" placeholder="Informe a cidade"/>
-							</div>
-						</div>	
-						<div class="form-group row">
-							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.estado')}? 'has-error'">
-								<label>Estado</label>
-								<input type="text" class="form-control input-sm"  th:field="*{endereco.estado}" maxlength="100" placeholder="Informe o estado"/>
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('telefoneresidencial')}? 'has-error'">
+							<label>Telefone</label> <input type="text"
+								class="form-control input-sm" th:field="*{telefoneresidencial}"
+								maxlength="10" placeholder="Informe o telefone" />
+						</div>
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('email')}? 'has-error'">
+							<label>E-mail</label> <input type="text"
+								class="form-control input-sm" th:field="*{email}" maxlength="50"
+								placeholder="Informe o email" />
+						</div>
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('endereco.endereco')}? 'has-error'">
+							<label>Endereço</label> <input type="text"
+								class="form-control input-sm" th:field="*{endereco.endereco}"
+								maxlength="100" placeholder="Informe o endereço" />
+						</div>
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('endereco.numero')}? 'has-error'">
+							<label>Número</label> <input type="text"
+								class="form-control input-sm" th:field="*{endereco.numero}"
+								maxlength="100" placeholder="Informe o numero" />
+						</div>
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('endereco.cep')}? 'has-error'">
+							<label>Cep</label> <input type="text"
+								class="form-control input-sm" th:field="*{endereco.cep}"
+								maxlength="12" placeholder="Informe o cep" />
+						</div>
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('endereco.logradouro')}? 'has-error'">
+							<label>Logradouro</label> <input type="text"
+								class="form-control input-sm" th:field="*{endereco.logradouro}"
+								maxlength="100" placeholder="Informe o logradouro" />
+						</div>
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('endereco.bairro')}? 'has-error'">
+							<label>Bairro</label> <input type="text"
+								class="form-control input-sm" th:field="*{endereco.bairro}"
+								maxlength="100" placeholder="Informe o bairro" />
+						</div>
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('endereco.cidade')}? 'has-error'">
+							<label>Cidade</label> <input type="text"
+								class="form-control input-sm" th:field="*{endereco.cidade}"
+								maxlength="100" placeholder="Informe a cidade" />
+						</div>
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('endereco.estado')}? 'has-error'">
+							<label>Estado</label> <input type="text"
+								class="form-control input-sm" th:field="*{endereco.estado}"
+								maxlength="100" placeholder="Informe o estado" />
+						</div>
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('endereco.pais')}? 'has-error'">
+							<label>Pais</label> <input type="text"
+								class="form-control input-sm" th:field="*{endereco.pais}"
+								maxlength="100" placeholder="Informe o pais" />
+						</div>
+						<div class="form-group">
+							<div class="col-md-2">
+								Selecione a foto : <input type='file' name='fileUpload' id="imagem" class='form-control' accept="image/*" ><br>
 							</div>
 						</div>
-						<div class="form-group row">
-							<div class="col-md-2" th:classappend="${#fields.hasErrors('endereco.pais')}? 'has-error'">
-								<label>Pais</label>
-								<input type="text" class="form-control input-sm"  th:field="*{endereco.pais}" maxlength="100" placeholder="Informe o pais"/>
-							</div>
-						</div>
-					</fieldset>
-				</div>
-				<div class="form-group row">
-					<button type="submit" class="btn btn-sm btn-primary">Salvar</button>
-					<a th:href="@{/}" class="btn btn-sm btn-default">Cancelar</a>
-				</div>
-			</form>
-			
+					<div class="modal-footer">
+						<a th:href="@{/}" class="btn btn-default"> <span>Cancelar</span></a>
+						<input type="submit" class="btn btn-success" value="Salvar">
+					</div>
+				</form>
 		</div>
 	</div>
 </body>

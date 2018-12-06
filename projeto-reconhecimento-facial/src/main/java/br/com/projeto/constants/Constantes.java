@@ -18,5 +18,7 @@ public class Constantes {
 	public final static String MENSAGEM_MAIS_DE_UM_ROSTO_NA_IMAGEM = "Mais de um rosto na imagem, por favor tente novamente !";
 	
 	public final static String MENSAGEM_CPF_DUPLICADO = "Cpf já cadastrado, por favor cadastrar outro CPF !";
+	
+	public final static String ROSTO_NAO_DETECTADO = "Rosto não detectado, por favor tentar novamente !";
 
 }

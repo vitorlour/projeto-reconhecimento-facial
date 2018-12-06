@@ -45,24 +45,28 @@ public class PessoaProcessor {
 
 		try {
 			listaDeRosto = faceService.detectarRosto(pessoa.getImagem());
-			if (listaDeRosto.size() == 1) {
-				retornoIdentificarPessoa = faceService.identificarPessoas(pessoa.getImagem());
-
-				if (retornoIdentificarPessoa != null) {
-					pessoa.setPersonId(personGroupPersonService.criarPessoaGrupo(Constantes.GRUPO_ID, pessoa.getNome())
-							.personId().toString());
-					personGroupPersonService.adicionarRostoPessoaGrupo(Constantes.GRUPO_ID, pessoa.getPersonId(),
-							pessoa.getImagem());
-					pessoa.setPersonGroupId(Constantes.GRUPO_ID);
-					if (pessoaService.save(pessoa)) {
-						retornoIdentificarPessoa.setMensagem(Constantes.MENSAGEM_CADASTRO_COM_SUCESSO);
-						personGroupService.trainGroup(Constantes.GRUPO_ID);
+			if(!listaDeRosto.isEmpty()) {
+				if (listaDeRosto.size() == 1) {
+	
+					if (retornoIdentificarPessoa != null) {
+						pessoa.setPersonId(personGroupPersonService.criarPessoaGrupo(Constantes.GRUPO_ID, pessoa.getNome())
+								.personId().toString());
+						personGroupPersonService.adicionarRostoPessoaGrupo(Constantes.GRUPO_ID, pessoa.getPersonId(),
+								pessoa.getImagem());
+						pessoa.setPersonGroupId(Constantes.GRUPO_ID);
+						if (pessoaService.save(pessoa)) {
+	
+							retornoIdentificarPessoa.setMensagem(Constantes.MENSAGEM_CADASTRO_COM_SUCESSO);
+							personGroupService.trainGroup(Constantes.GRUPO_ID);
+						}
 					}
+				} else {
+					retornoIdentificarPessoa.setMensagem(Constantes.MENSAGEM_MAIS_DE_UM_ROSTO_NA_IMAGEM);
 				}
-			} else {
-				retornoIdentificarPessoa.setMensagem(Constantes.MENSAGEM_MAIS_DE_UM_ROSTO_NA_IMAGEM);
+			}else {
+				retornoIdentificarPessoa.setMensagem(Constantes.ROSTO_NAO_DETECTADO);
 			}
-		}catch (DataIntegrityViolationException c){
+		} catch (DataIntegrityViolationException c) {
 			retornoIdentificarPessoa.setMensagem(Constantes.MENSAGEM_CPF_DUPLICADO);
 		} catch (APIErrorException e) {
 			retornoIdentificarPessoa.setMensagem(e.getMessage());

@@ -15,7 +15,7 @@ import br.com.microsoft.azure.cognitiveservices.vision.faceapi.models.DetectedFa
 import br.com.microsoft.azure.cognitiveservices.vision.faceapi.models.IdentifyCandidate;
 import br.com.projeto.azure.service.FaceService;
 import br.com.projeto.azure.service.PersonGroupService;
-import br.com.projeto.entity.Pessoa;
+import br.com.projeto.entity.Imagem;
 import br.com.projeto.entity.RetornoIdentificarPessoa;
 
 @RestController
@@ -29,23 +29,23 @@ public class AzureRestController {
 	private PersonGroupService personGroupService;
 
 	@RequestMapping(value = "detectarrosto/", method = RequestMethod.POST)
-	public List<DetectedFace> detectarRosto(@RequestBody byte[] imagem) throws IOException {
-		return faceService.detectarRosto(imagem);
+	public List<DetectedFace> detectarRosto(@RequestBody Imagem imagem) throws IOException {
+		return faceService.detectarRosto(imagem.getImagem());
 	}
 
 	@RequestMapping(value = "listafaceids/", method = RequestMethod.POST)
-	public List<UUID> getListaFaceIds(@RequestBody byte[] imagem) throws IOException {
-		return faceService.getListaFaceIds(imagem);
+	public List<UUID> getListaFaceIds(@RequestBody Imagem imagem) throws IOException {
+		return faceService.getListaFaceIds(imagem.getImagem());
 	}
 	
 	@RequestMapping(value = "listarostosidentificados/", method = RequestMethod.POST)
-	public List<IdentifyCandidate> identificarRosto(@RequestBody byte[] imagem) throws IOException {
-		return faceService.identificarRosto(imagem);
+	public List<IdentifyCandidate> identificarRosto(@RequestBody Imagem imagem) throws IOException {
+		return faceService.identificarRosto(imagem.getImagem());
 	}
 	
-	@RequestMapping(value = "listapessoasidentificadas/", method = RequestMethod.POST)
-	public RetornoIdentificarPessoa identificarPessoas(@RequestBody Pessoa pessoa) throws IOException {
-		return faceService.identificarPessoas(pessoa.getImagem());
+	@RequestMapping(value = "listapessoasidentificadas/", method = RequestMethod.POST,  produces = "application/json")
+	public RetornoIdentificarPessoa identificarPessoas(@RequestBody Imagem imagem) throws IOException {
+		return faceService.identificarPessoas(imagem.getImagem());
 	}
 	
 	@RequestMapping(value = "criargrupo/", method = RequestMethod.POST)

@@ -24,7 +24,7 @@ import br.com.projeto.service.PessoaService;
 public class FaceServiceImpl implements FaceService {
 
 	@Autowired
-	PessoaService pessoaService;
+	private PessoaService pessoaService;
 
 	private final static DetectWithStreamOptionalParameter streamParameter;
 
@@ -35,15 +35,15 @@ public class FaceServiceImpl implements FaceService {
 		identifyParameter = new IdentifyOptionalParameter();
 	}
 
-	public List<DetectedFace> detectarRosto(byte[] imagem) {
-
+	public List<DetectedFace> detectarRosto(byte[] imagem) throws APIErrorException {
+		
 		List<DetectedFace> listaRostosDetectados = ConexaoAzure.ConectaAzureBrasil().faces().detectWithStream(imagem,
 				streamParameter.withReturnFaceId(true));
 
 		return listaRostosDetectados;
 	}
 
-	public List<UUID> getListaFaceIds(byte[] imagem) {
+	public List<UUID> getListaFaceIds(byte[] imagem) throws APIErrorException {
 		List<DetectedFace> listaRostosDetectados = detectarRosto(imagem);
 
 		List<UUID> listaFaceIds = new ArrayList<UUID>();
@@ -56,11 +56,13 @@ public class FaceServiceImpl implements FaceService {
 	}
 
 	public List<IdentifyCandidate> identificarRosto(byte[] imagem) {
-
-		List<UUID> listaFaceIds = getListaFaceIds(imagem);
-
+		
 		List<IdentifyCandidate> retornoListaRostosIdentificados = new ArrayList<IdentifyCandidate>();
+		
 		try {
+			
+			List<UUID> listaFaceIds = getListaFaceIds(imagem);
+			
 			if (listaFaceIds != null) {
 
 				List<IdentifyResult> listaRostosIdentificados = ConexaoAzure.ConectaAzureBrasil().faces().identify(
@@ -73,7 +75,6 @@ public class FaceServiceImpl implements FaceService {
 				}
 			}
 		} catch (APIErrorException e) {
-			e.getMessage();
 		}
 		return retornoListaRostosIdentificados;
 	}
@@ -103,7 +104,6 @@ public class FaceServiceImpl implements FaceService {
 				}
 			}
 		} catch (APIErrorException e) {
-			e.getCause();
 		}
 		return retornoPessoa;
 	}
