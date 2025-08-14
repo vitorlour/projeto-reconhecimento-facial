@@ -1,46 +1,32 @@
-/**
- * 
- */
 package br.com.projeto.azure.service.impl;
 
-import java.time.ZonedDateTime;
-import java.util.UUID;
-
+import com.azure.ai.vision.face.FaceAdministrationClient;
+import com.azure.ai.vision.face.models.CreatePersonGroupPersonResult;
+import com.azure.ai.vision.face.models.PersonGroupPerson;
+import com.azure.core.util.BinaryData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import br.com.microsoft.azure.cognitiveservices.vision.faceapi.models.APIErrorException;
-import br.com.microsoft.azure.cognitiveservices.vision.faceapi.models.AddPersonFaceFromStreamOptionalParameter;
-import br.com.microsoft.azure.cognitiveservices.vision.faceapi.models.CreatePersonGroupPersonsOptionalParameter;
-import br.com.microsoft.azure.cognitiveservices.vision.faceapi.models.PersistedFace;
-import br.com.microsoft.azure.cognitiveservices.vision.faceapi.models.Person;
 import br.com.projeto.azure.conexao.ConexaoAzure;
 import br.com.projeto.azure.service.PersonGroupPersonService;
 
-/**
- * @author vitor
- *
- */
+import java.util.UUID;
+
 @Service
 public class PersonGroupPersonServiceImpl implements PersonGroupPersonService {
 
-	private final static CreatePersonGroupPersonsOptionalParameter groupPerson;
+    @Autowired
+    private ConexaoAzure conexaoAzure;
 
-	private final static AddPersonFaceFromStreamOptionalParameter faceStreamParameter;
+    @Override
+    public CreatePersonGroupPersonResult criarPessoaGrupo(String personGroupId, String nome) {
+        FaceAdministrationClient adminClient = conexaoAzure.conectaAzureAdmin();
+        return adminClient.createPersonGroupPerson(personGroupId, new PersonGroupPerson().setName(nome));
+    }
 
-	static {
-		groupPerson = new CreatePersonGroupPersonsOptionalParameter();
-		faceStreamParameter = new AddPersonFaceFromStreamOptionalParameter();
-	}
-
-	public Person criarPessoaGrupo(String personGroupId, String nome) throws APIErrorException {
-		return ConexaoAzure.ConectaAzureBrasil().personGroupPersons().create(personGroupId, groupPerson.withName(nome));
-	}
-
-	public PersistedFace adicionarRostoPessoaGrupo(String personGroupId, String personId, byte[] imagem)  throws APIErrorException{
-		ZonedDateTime now = ZonedDateTime.now();
-		UUID personIdUUID = UUID.fromString(personId);
-		return ConexaoAzure.ConectaAzureBrasil().personGroupPersons().addPersonFaceFromStream(personGroupId, personIdUUID,
-				imagem, faceStreamParameter.withUserData(now.toString()));
-	}
-
+    @Override
+    public com.azure.ai.vision.face.models.PersistedFace adicionarRostoPessoaGrupo(String personGroupId, String personId, byte[] imagem) {
+        FaceAdministrationClient adminClient = conexaoAzure.conectaAzureAdmin();
+        BinaryData binaryData = BinaryData.fromBytes(imagem);
+        return adminClient.addPersonGroupPersonFace(personGroupId, UUID.fromString(personId), binaryData, null, null);
+    }
 }

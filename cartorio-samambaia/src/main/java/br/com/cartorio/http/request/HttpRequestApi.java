@@ -1,186 +1,160 @@
-/**
- * 
- */
 package br.com.cartorio.http.request;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-
-import br.com.cartorio.constants.Constantes;
 import br.com.cartorio.entity.Imagem;
 import br.com.cartorio.entity.Pessoa;
 import br.com.cartorio.entity.PessoasIdentificadas;
 import br.com.cartorio.entity.RetornoIdentificarPessoa;
 import br.com.cartorio.util.GsonHelper;
 
-/**
- * @author vitor
- *
- */
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class HttpRequestApi {
 
-	public HttpEntity salvarPessoaRequest(Pessoa pessoa) {
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequestApi.class);
 
-		HttpEntity entity = null;
+    @Value("${api.url.pessoa.salvar}")
+    private String salvarPessoaUrl;
 
-		try {
-			HttpClient httpclient = new DefaultHttpClient();
-			URIBuilder builder = new URIBuilder(Constantes.URI_SALVAR_PESSOA);
+    @Value("${api.url.pessoa.encontrartodos}")
+    private String encontrarTodosUrl;
 
-			URI uri = builder.build();
-			HttpPost request = new HttpPost(uri);
+    @Value("${api.url.pessoa.encontrarporid}")
+    private String encontrarPorIdUrl;
 
-			request.setHeader("Content-Type", "application/json;charset=UTF-8");
-			
-			Gson gson = null;
-			if(pessoa.getId() > 0) {
-				gson = new Gson();
-			}else {
-				gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-			}
+    @Value("${api.url.pessoa.delete}")
+    private String deleteUrl;
 
-			String jsonInString = gson.toJson(pessoa);
+    @Value("${api.url.azure.reconhecimento}")
+    private String reconhecimentoUrl;
 
-			StringEntity reqEntity = new StringEntity(jsonInString, "UTF-8");
+    private final CloseableHttpClient httpClient;
 
-			request.setEntity(reqEntity);
+    public HttpRequestApi() {
+        PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+        cm.setMaxTotal(20);
+        cm.setDefaultMaxPerRoute(20);
 
-			HttpResponse response = httpclient.execute(request);
-			entity = response.getEntity();
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(5000)
+                .setSocketTimeout(5000)
+                .setConnectionRequestTimeout(5000)
+                .build();
 
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		return entity;
-	}
+        this.httpClient = HttpClients.custom()
+                .setConnectionManager(cm)
+                .setDefaultRequestConfig(requestConfig)
+                .build();
+    }
 
-	public Pessoa[] encontratodosRequest() {
 
-		Pessoa[] pessoa = null;
+    public HttpEntity salvarPessoaRequest(Pessoa pessoa) {
+        try {
+            URIBuilder builder = new URIBuilder(salvarPessoaUrl);
+            URI uri = builder.build();
+            HttpPost request = new HttpPost(uri);
+            request.setHeader("Content-Type", "application/json;charset=UTF-8");
 
-		try {
+            Gson gson = (pessoa.getId() > 0) ? new Gson() : new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+            String jsonInString = gson.toJson(pessoa);
+            StringEntity reqEntity = new StringEntity(jsonInString, "UTF-8");
+            request.setEntity(reqEntity);
 
-			HttpClient httpclient = new DefaultHttpClient();
-			URIBuilder builder = new URIBuilder(Constantes.URI_PESSOA_ENCONTRAR_TODOS);
-			URI uri = builder.build();
-			HttpGet request = new HttpGet(uri);
+            HttpResponse response = httpClient.execute(request);
+            return response.getEntity();
+        } catch (Exception e) {
+            logger.error("Error saving person", e);
+        }
+        return null;
+    }
 
-			HttpResponse response = httpclient.execute(request);
+    public Pessoa[] encontratodosRequest() {
+        try {
+            URIBuilder builder = new URIBuilder(encontrarTodosUrl);
+            URI uri = builder.build();
+            HttpGet request = new HttpGet(uri);
 
-			String jsonString = EntityUtils.toString(response.getEntity()).trim();
+            HttpResponse response = httpClient.execute(request);
+            String jsonString = EntityUtils.toString(response.getEntity()).trim();
+            return GsonHelper.customGson.fromJson(jsonString, Pessoa[].class);
+        } catch (Exception e) {
+            logger.error("Error finding all people", e);
+        }
+        return null;
+    }
 
-			pessoa = GsonHelper.customGson.fromJson(jsonString, Pessoa[].class);
+    public Pessoa encontraPorIdRequest(Long id) {
+        try {
+            URIBuilder builder = new URIBuilder(encontrarPorIdUrl + id);
+            URI uri = builder.build();
+            HttpGet request = new HttpGet(uri);
+            request.setHeader("Content-Type", "application/json");
 
-		} catch (JsonSyntaxException j) {
-			j.printStackTrace();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		return pessoa;
-	}
+            HttpResponse response = httpClient.execute(request);
+            String jsonString = EntityUtils.toString(response.getEntity()).trim();
+            return GsonHelper.customGson.fromJson(jsonString, Pessoa.class);
+        } catch (Exception e) {
+            logger.error("Error finding person by id", e);
+        }
+        return null;
+    }
 
-	public Pessoa encontraPorIdRequest(Long id) {
+    public void deleteRequest(Long id) {
+        try {
+            URIBuilder builder = new URIBuilder(deleteUrl + id);
+            URI uri = builder.build();
+            HttpDelete request = new HttpDelete(uri);
+            request.setHeader("Content-Type", "application/json");
+            httpClient.execute(request);
+        } catch (Exception e) {
+            logger.error("Error deleting person", e);
+        }
+    }
 
-		Pessoa pessoa = null;
+    public List<PessoasIdentificadas> reconhecimentoFacial(Imagem imagem) {
+        List<PessoasIdentificadas> identificadas = new ArrayList<>();
+        try {
+            URIBuilder builder = new URIBuilder(reconhecimentoUrl);
+            URI uri = builder.build();
+            HttpPost request = new HttpPost(uri);
+            request.setHeader("Content-Type", "application/json");
 
-		try {
+            Gson gson = new Gson();
+            String jsonInString = gson.toJson(imagem);
+            StringEntity reqEntity = new StringEntity(jsonInString);
+            request.setEntity(reqEntity);
 
-			HttpClient httpclient = new DefaultHttpClient();
-			URIBuilder builder = new URIBuilder(Constantes.URI_PESSOA_ENCONTRAR_POR_ID + id);
-			URI uri = builder.build();
-			HttpGet request = new HttpGet(uri);
+            HttpResponse response = httpClient.execute(request);
+            String jsonString = EntityUtils.toString(response.getEntity()).trim();
+            RetornoIdentificarPessoa retorno = GsonHelper.customGson.fromJson(jsonString, RetornoIdentificarPessoa.class);
 
-			request.setHeader("Content-Type", "application/json");
-
-			HttpResponse response = httpclient.execute(request);
-			String jsonString = EntityUtils.toString(response.getEntity()).trim();
-
-			pessoa = GsonHelper.customGson.fromJson(jsonString, Pessoa.class);
-
-		} catch (JsonSyntaxException j) {
-			j.printStackTrace();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		return pessoa;
-	}
-
-	public void deleteRequest(Long id) {
-
-		try {
-
-			HttpClient httpclient = new DefaultHttpClient();
-			URIBuilder builder = new URIBuilder(Constantes.URI_PESSOA_DELETE + id);
-			URI uri = builder.build();
-			HttpDelete request = new HttpDelete(uri);
-
-			request.setHeader("Content-Type", "application/json");
-
-			httpclient.execute(request);
-
-		} catch (JsonSyntaxException j) {
-			System.out.println(j.getMessage());
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
-	public List<PessoasIdentificadas> reconhecimentoFacial(Imagem imagem) {
-
-		List<PessoasIdentificadas> identificadas = new ArrayList<PessoasIdentificadas>();
-
-		RetornoIdentificarPessoa retorno = null;
-
-		try {
-			HttpClient httpclient = new DefaultHttpClient();
-			URIBuilder builder = new URIBuilder(Constantes.URI_AZURE_RECONHECIMENTO);
-
-			URI uri = builder.build();
-			HttpPost request = new HttpPost(uri);
-
-			request.setHeader("Content-Type", "application/json");
-
-			Gson gson = new Gson();
-
-			String jsonInString = gson.toJson(imagem);
-
-			StringEntity reqEntity = new StringEntity(jsonInString);
-
-			request.setEntity(reqEntity);
-
-			HttpResponse response = httpclient.execute(request);
-			String jsonString = EntityUtils.toString(response.getEntity()).trim();
-
-			retorno = GsonHelper.customGson.fromJson(jsonString, RetornoIdentificarPessoa.class);
-
-			if (retorno != null) {
-				for (PessoasIdentificadas pessoasIdentificadas : retorno.getIdentificarPessoa()) {
-					identificadas.add(pessoasIdentificadas);
-				}
-			}
-			
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		return identificadas;
-	}
-
+            if (retorno != null && retorno.getIdentificarPessoa() != null) {
+                identificadas.addAll(retorno.getIdentificarPessoa());
+            }
+        } catch (Exception e) {
+            logger.error("Error in facial recognition", e);
+        }
+        return identificadas;
+    }
 }

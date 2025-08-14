@@ -1,8 +1,9 @@
 /**
- * 
+ *
  */
 package br.com.projeto.azure.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.microsoft.azure.cognitiveservices.vision.faceapi.models.APIErrorException;
@@ -17,6 +18,9 @@ import br.com.projeto.azure.service.PersonGroupService;
 @Service
 public class PersonGroupServiceImpl implements PersonGroupService {
 
+	@Autowired
+	private ConexaoAzure conexaoAzure;
+
 	private final static CreatePersonGroupsOptionalParameter groupParameter;
 
 	static {
@@ -24,11 +28,11 @@ public class PersonGroupServiceImpl implements PersonGroupService {
 	}
 
 	public void criarGrupo(String personGroupId, String nome) throws APIErrorException {
-		ConexaoAzure.ConectaAzureBrasil().personGroups().create(personGroupId, groupParameter.withName(nome));
+		conexaoAzure.conectaAzureBrasil().personGroups().create(personGroupId, groupParameter.withName(nome));
 	}
 
 	public void trainGroup(String personGroupId) throws APIErrorException {
-		ConexaoAzure.ConectaAzureBrasil().personGroups().train(personGroupId);
+		conexaoAzure.conectaAzureBrasil().personGroups().train(personGroupId);
 	}
 
 }
